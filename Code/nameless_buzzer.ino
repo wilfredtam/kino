@@ -19,6 +19,10 @@ int relay4 = 4;
 int switchState1; // integers to hold the states of each switch
 int switchState2;
 int selectState;
+boolean state1;
+boolean state2;
+boolean state3;
+boolean state4;
 
 unsigned long buzzerTimer = 0; //unsigned long because the number will get large, time buzzer has been running
 
@@ -48,12 +52,14 @@ void setup() {
 
 void loop() {
   selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
+  delay(500);
   if(selectState == HIGH){
     manualScan();
   }
   if(selectState == LOW){
     autoScan();
   }
+  sleepSetup();
 }
 
 void autoScan(){
@@ -180,21 +186,28 @@ void autoScan(){
 }
 
 void manualScan(){
-      ledState(led1, relay1);
+      state1 = ledState(led1, relay1);
       delay(500);
-      ledState(led1, relay2);
-      delay(500);
-      ledState(led1, relay3);
-      delay(500);
-      ledState(led1, relay4);
-      delay(100);
-      sleepSetup();
+      if(state1 == true){
+        state2 = ledState(led1, relay2);
+        delay(500);
+        if(state2 == true){
+          state3 = ledState(led1, relay3);
+          delay(500);
+          if(state3 == true){
+            state4 = ledState(led1, relay4);
+            delay(500);
+          }
+        }
+      }
 }
 
-void ledState(int ledx, int readRelayx){
+boolean ledState(int ledx, int readRelayx){
   int redLedx = readRelayx;
   digitalWrite(ledx, LOW);
-  while(1){
+  boolean isCycle = true;
+  boolean notSleep = true;
+  while(isCycle){
     switchState1 = digitalRead(switchPin1);
     if(switchState1 == LOW){
       continue;
@@ -203,13 +216,19 @@ void ledState(int ledx, int readRelayx){
       digitalWrite(ledx, HIGH);
       int x = 0;
       while(x<10000){                                    //long autoscan, which will eventually send it to sleep mode
-        if((millis() - buzzerTimer)>1000){
-          digitalWrite(ledx, LOW);
-        }
         switchState1 = digitalRead(switchPin1);
         switchState2 = digitalRead(switchPin2);
+        if(redLedx == relay1){
+          if(x>150){
+            digitalWrite(ledx, LOW);
+          }
+        }
+        else if(x>75){
+          digitalWrite(ledx, LOW);
+        }
         if(switchState2 == LOW && switchState1 == HIGH){ //Selection LED
           digitalWrite(redLedx, LOW);
+          digitalWrite(ledx, LOW);
           while(1){                                      //Will turn off when selection released
             switchState2 = digitalRead(switchPin2);
             if(switchState2 == HIGH){
@@ -235,14 +254,21 @@ void ledState(int ledx, int readRelayx){
             }
           }
           digitalWrite(ledx, LOW);
+          isCycle = false;
           break;
         }
+        if(x>= 9999) {
+          notSleep = false;
       }
-      break;
+      isCycle = false;
     }
   }
 }
-
+if(isCycle == false && notSLeep == false){
+  return false;
+}
+  return true;
+}
 
 void sleepSetup(){                                      // sleep mode 
   sleep_enable();
