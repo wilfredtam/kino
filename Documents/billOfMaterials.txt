@@ -1,1 +1,19 @@
+This devices uses the following materials and their respective costs:
 
+1 Arduino NANO board: $ 18.65/3 = $6.22/1 (Amazon.ca)
+
+1 Buzzer: $ 3 (Lee's Electronics)
+
+1 Printed Circuit Board: $ 12.99/ 10pc 70mm X 90 mm (Amazon.ca)
+
+1 Relay: $ 10.86 (Amazon.ca)
+
+5 AUX Ports (1 for the Input, 4 for the Outputs on the relay): $ 1 for One? (Lee's Electronics)
+
+3D printed box (schematic can be found in this repo)
+
+3 1kOhm through hole resistors (pull ups for the switches): < $ 0.50 (digikey.ca) 
+
+1 DIP switch: < $1.00 (digikey.ca)
+
+Assorted wires
