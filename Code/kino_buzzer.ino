@@ -264,7 +264,7 @@ boolean ledState(int ledx, int readRelayx){
     }
   }
 }
-if(isCycle == false && notSLeep == false){
+if(isCycle == false && notSleep == false){
   return false;
 }
   return true;
