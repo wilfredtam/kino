@@ -49,7 +49,7 @@ void setup() {
 }
 
 
-// ** GOAL: change so that the beeps are with their respective outputs (one for 1, two for 2, etc...)
+// ** GOAL: change so that the beeps are with their respective outputs (one for 1, two for 2, three for 3, etc...)
 
 void loop() {
   selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
