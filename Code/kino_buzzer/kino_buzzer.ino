@@ -52,15 +52,15 @@ void setup() {
 // ** GOAL: change so that the beeps are with their respective outputs (one for 1, two for 2, three for 3, etc...)
 
 void loop() {
-//  selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
-//  delay(500);
-//  if(selectState == HIGH){
+  selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
+  delay(500);
+  if(selectState == HIGH){
     manualScan();
-//  }
-//  if(selectState == LOW){
-//    autoScan();
-//  }
-//  sleepSetup();
+  }
+  if(selectState == LOW){
+    autoScan();
+  }
+  sleepSetup();
 }
 
 void autoScan(){
