@@ -11,10 +11,10 @@ const int led1 = 13; // pins for the indicator LED (manualScan);
 
 // constant int because these pins will/should not change
 
-int relay1 = 7; // setting relay pins 
-int relay2 = 6; 
-int relay3 = 5;
-int relay4 = 4;
+const int relay1 = 7; // setting relay pins 
+const int relay2 = 6; 
+const int relay3 = 5;
+const int relay4 = 4;
 
 int switchState1; // integers to hold the states of each switch
 int switchState2;
@@ -52,15 +52,15 @@ void setup() {
 // ** GOAL: change so that the beeps are with their respective outputs (one for 1, two for 2, three for 3, etc...)
 
 void loop() {
-  selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
-  delay(500);
-  if(selectState == HIGH){
+//  selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
+//  delay(500);
+//  if(selectState == HIGH){
     manualScan();
-  }
-  if(selectState == LOW){
-    autoScan();
-  }
-  sleepSetup();
+//  }
+//  if(selectState == LOW){
+//    autoScan();
+//  }
+//  sleepSetup();
 }
 
 void autoScan(){
@@ -205,28 +205,35 @@ void manualScan(){
 
 boolean ledState(int ledx, int readRelayx){
   int redLedx = readRelayx;
+  int relayNum = 0;
   digitalWrite(ledx, LOW);
   boolean isCycle = true;
   boolean notSleep = true;
+  switch(redLedx) {
+    case relay1: 
+      relayNum = 1;
+      break;
+    case relay2:
+      relayNum = 2;
+      break;
+    case relay3:
+      relayNum = 3;
+      break;
+    case relay4:
+      relayNum = 4;
+      break;
+  }
+  buzzerTrig(relayNum);  
   while(isCycle){
     switchState1 = digitalRead(switchPin1);
     if(switchState1 == LOW){
       continue;
     }
     else {
-      digitalWrite(ledx, HIGH);
       int x = 0;
       while(x<10000){                                    //long autoscan, which will eventually send it to sleep mode
         switchState1 = digitalRead(switchPin1);
         switchState2 = digitalRead(switchPin2);
-        if(redLedx == relay1){
-          if(x>150){
-            digitalWrite(ledx, LOW);
-          }
-        }
-        else if(x>75){
-          digitalWrite(ledx, LOW);
-        }
         if(switchState2 == LOW && switchState1 == HIGH){ //Selection LED
           digitalWrite(redLedx, LOW);
           digitalWrite(ledx, LOW);
@@ -281,5 +288,14 @@ void sleepSetup(){                                      // sleep mode
 void pinInterrupt(){                                    // this program will run when the interrupt pin is LOW [determined in sleepSetup()]
   sleep_disable();
   detachInterrupt(0);
+}
+
+void buzzerTrig(int outputNumber){
+  for(int i=0; i<outputNumber; i++) {
+    digitalWrite(led1, HIGH);
+    delay(500);
+    digitalWrite(led1, LOW);
+    delay(50);
+  }
 }
 
