@@ -39,7 +39,7 @@ void setup() {
   pinMode(relay4, OUTPUT);
   pinMode(interrupt, INPUT);
 
-  digitalWrite(led1, LOW); // setting the initial states of each output
+  digitalWrite(led1, LOW); // setting the initial states of each output, // buzzer is active high
   digitalWrite(relay1, HIGH); // the relays are active low, so set them initially HIGH
   digitalWrite(relay2, HIGH);
   digitalWrite(relay3, HIGH);
@@ -69,13 +69,9 @@ void autoScan(){
     for(int i=led1; i>=10; i--){
       switch(i){
         case 13: {
+          buzzerTrig(1);
           int x = 0;
-          digitalWrite(led1,HIGH);                // buzzer is active high
-          buzzerTimer = millis();
           while(x<60){                            // the amount of time that will be on this 'case'
-            if((millis()-buzzerTimer) > 750){     // setting the amount of time(in ms) the buzzer will ring
-            digitalWrite(led1,LOW);
-            }
             switchState2 = digitalRead(switchPin2);
             if(switchState2 == LOW){              // switch is active low because of pull up resistor, when switch closes, will be connected to gnd
               digitalWrite(relay1,LOW);           // relay is active low 
@@ -95,13 +91,9 @@ void autoScan(){
           break;  
         }
         case 12: {
+          buzzerTrig(2);
           int x = 0;
-          digitalWrite(led1,HIGH); 
-          buzzerTimer = millis();
           while(x<60){
-            if((millis()-buzzerTimer) > 750){
-            digitalWrite(led1,LOW);
-            }
             switchState2 = digitalRead(switchPin2);
             if(switchState2 == LOW){
               digitalWrite(relay2,LOW);
@@ -121,13 +113,9 @@ void autoScan(){
           break;  
         }
         case 11: {
+          buzzerTrig(3);
           int x = 0;
-          digitalWrite(led1,HIGH);
-          buzzerTimer = millis();
           while(x<60){
-            if((millis()-buzzerTimer) > 750){
-            digitalWrite(led1,LOW);
-            }
             switchState2 = digitalRead(switchPin2);
             if(switchState2 == LOW){
               digitalWrite(relay3,LOW);
@@ -147,13 +135,9 @@ void autoScan(){
           break;  
         }
         case 10: {
+          buzzerTrig(4);
           int x = 0;
-          digitalWrite(led1,HIGH);
-          buzzerTimer = millis();
           while(x<60){
-            if((millis()-buzzerTimer) > 750){
-            digitalWrite(led1,LOW);
-            }
             switchState2 = digitalRead(switchPin2);
             if(switchState2 == LOW){
               digitalWrite(relay4,LOW); 
