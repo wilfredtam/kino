@@ -3,8 +3,8 @@
 
 #include <avr/sleep.h> // sleep mode library
 
-const int switchPin1 = 8; // cycling pin
-const int switchPin2 = 3; // selection pin & returning from sleep mode
+const int switchPin1 = 3; // cycling pin (middle)
+const int switchPin2 = 8; // selection pin & returning from sleep mode (tip)
 const int selectPin = 9; // mode selection pin
 
 const int led1 = 13; // pins for the indicator LED (manualScan);
@@ -26,7 +26,7 @@ boolean state4;
 
 unsigned long buzzerTimer = 0; //unsigned long because the number will get large, time buzzer has been running
 
-int interrupt = 2; // interrupt pin for sleep mode
+int interrupt = 2; // interrupt pin for sleep mode (attached to tip)
 
 void setup() {
 
@@ -53,7 +53,7 @@ void setup() {
 
 void loop() {
   selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
-  delay(500);
+  delay(100);
   if(selectState == HIGH){
     manualScan();
   }
@@ -161,7 +161,7 @@ void autoScan(){
     z++;                                              // adds to z until fulfills the for loop
   }
   sleepSetup();                                       // sleeps after the for loop is fulfilled
-  delay(1500);
+  delay(1000);
   while(1){
     switchState2 = digitalRead(switchPin2);
     if(switchState2 == HIGH){
@@ -209,8 +209,8 @@ boolean ledState(int ledx, int readRelayx){
   }
   buzzerTrig(relayNum);  
   while(isCycle){
-    switchState1 = digitalRead(switchPin1);
-    if(switchState1 == LOW){
+    switchState2 = digitalRead(switchPin2);
+    if(switchState2 == LOW){
       continue;
     }
     else {
@@ -218,12 +218,12 @@ boolean ledState(int ledx, int readRelayx){
       while(x<10000){                                    //long autoscan, which will eventually send it to sleep mode
         switchState1 = digitalRead(switchPin1);
         switchState2 = digitalRead(switchPin2);
-        if(switchState2 == LOW && switchState1 == HIGH){ //Selection LED
+        if(switchState1 == LOW && switchState2 == HIGH){ //Selection LED
           digitalWrite(redLedx, LOW);
           digitalWrite(ledx, LOW);
           while(1){                                      //Will turn off when selection released
-            switchState2 = digitalRead(switchPin2);
-            if(switchState2 == HIGH){
+            switchState1 = digitalRead(switchPin1);
+            if(switchState1 == HIGH){
               digitalWrite(redLedx, HIGH);
               break;
             }
@@ -231,16 +231,16 @@ boolean ledState(int ledx, int readRelayx){
         }
         x++;
         delay(6);
-        if(switchState1 == LOW && switchState2 == HIGH){ //going to next LED (ending the while loop)
-          switchState1 = digitalRead(switchPin1); 
+        if(switchState2 == LOW && switchState1 == HIGH){ //going to next LED (ending the while loop)
+          switchState2 = digitalRead(switchPin2); 
           boolean isHigh = true;
           buzzerTimer = millis();
           while(isHigh){
-            int switchState1 = digitalRead(switchPin1);
-            if(switchState1 == LOW){
+            int switchState2 = digitalRead(switchPin2);
+            if(switchState2 == LOW){
               isHigh = true;
             }
-            if(switchState1 == HIGH){
+            if(switchState2 == HIGH){
               isHigh = false;
               break;
             }
