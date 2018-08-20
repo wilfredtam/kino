@@ -53,7 +53,7 @@ void setup() {
 
 void loop() {
   selectState = digitalRead(selectPin); // selecting the state of the device depending on mode selection pin(9)
-  delay(100);
+  delay(500);
   if(selectState == HIGH){
     manualScan();
   }
@@ -61,11 +61,17 @@ void loop() {
     autoScan();
   }
   sleepSetup();
+  while(1){
+   switchState2 = digitalRead(switchPin2);
+   if(switchState2 == HIGH){
+     break;  
+   }
+  }
 }
 
 void autoScan(){
   int z = 0;
-  while(z<3){                                     // the auto scan will occur for 3 cycles (z = 0,1,2)
+  while(z<1){                                     // the auto scan will occur for 3 cycles (z = 0,1,2)
     for(int i=led1; i>=10; i--){
       switch(i){
         case 13: {
@@ -160,14 +166,6 @@ void autoScan(){
     }
     z++;                                              // adds to z until fulfills the for loop
   }
-  sleepSetup();                                       // sleeps after the for loop is fulfilled
-  delay(1000);
-  while(1){
-    switchState2 = digitalRead(switchPin2);
-    if(switchState2 == HIGH){
-      break;  
-    }
-  }
 }
 
 void manualScan(){
@@ -221,6 +219,7 @@ boolean ledState(int ledx, int readRelayx){
         if(switchState1 == LOW && switchState2 == HIGH){ //Selection LED
           digitalWrite(redLedx, LOW);
           digitalWrite(ledx, LOW);
+          x=0;
           while(1){                                      //Will turn off when selection released
             switchState1 = digitalRead(switchPin1);
             if(switchState1 == HIGH){
